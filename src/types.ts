@@ -20,12 +20,14 @@ export type REMOVE = {
 
 export type Action = ADD | COMPLETE | UNCOMPLETE | REMOVE;
 
+export type StateItem = {
+    addedAt: number,
+    content: string,
+    isComplete: boolean,
+};
+
 export type AppState = {
-    [key: string]: {
-        addedAt: number,
-        content: string,
-        isComplete: boolean,
-    },
+    [key: string]: StateItem,
 };
 
 export type FormValues = {

@@ -17,8 +17,6 @@ function App() {
     });
   }, []);
 
-
-
   if (!isLoaded) {
     return (
       <div className="container">

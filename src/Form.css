@@ -1,0 +1,26 @@
+.todos-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2vh 2vw;
+}
+
+.todo {
+  align-items: center;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  display: flex;
+  padding: 1vh 2vw;
+}
+
+.todo:hover, .todo:focus-within {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.todo input {
+  margin-right: 3vw;
+}
+
+.todo .todo__content {
+  cursor: pointer;
+  flex-grow: 1;
+}
