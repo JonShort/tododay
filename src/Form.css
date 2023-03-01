@@ -24,3 +24,11 @@
   cursor: pointer;
   flex-grow: 1;
 }
+
+.sync-container {
+  bottom: 0;
+  color:rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  position: absolute;
+  right: 10px;
+}

@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { useForm } from "react-hook-form";
 
 import { appStateReducer } from "./appStateReducer";
-import type { AppState, FormValues, StateItem } from "./types";
+import { Syncer } from "./Syncer";
+import type { AppState, FormValues } from "./types";
 import "./Form.css";
 
 type Props = {
@@ -67,6 +68,10 @@ export const Form = ({ initialFormState = {} }: Props) => {
             </label>
           );
         })}
+      </div>
+
+      <div className="sync-container">
+        <Syncer appState={state} />
       </div>
     </div>
   );
