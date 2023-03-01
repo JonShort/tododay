@@ -57,7 +57,7 @@ export const Form = ({ initialFormState = {} }: Props) => {
           return (
             <label className="todo" key={todoId}>
               <input
-                onClick={() => handleCheck(todoId, isComplete)}
+                onChange={() => handleCheck(todoId, isComplete)}
                 checked={isComplete}
                 id={todoId}
                 type="checkbox"
