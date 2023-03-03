@@ -54,7 +54,7 @@ export const Syncer = ({ appState }: Props) => {
 
   useEffect(() => {
     if (state.syncStatus === "SYNCING") {
-      invoke("sync", appState).then(() => {
+      invoke("sync", { content: JSON.stringify(appState) }).then(() => {
         dispatch("FINISH_SYNCING");
       });
     }
