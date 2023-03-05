@@ -64,7 +64,12 @@ export const Form = ({ initialFormState = {} }: Props) => {
                 type="checkbox"
               />
               <span className="todo__content">{content}</span>
-              <button onClick={() => handleRemove(todoId)}>x</button>
+              <button
+                className="button__del"
+                onClick={() => handleRemove(todoId)}
+              >
+                x
+              </button>
             </label>
           );
         })}

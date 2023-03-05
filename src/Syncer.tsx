@@ -61,8 +61,8 @@ export const Syncer = ({ appState }: Props) => {
   }, [state.syncStatus]);
 
   if (state.syncStatus === "SYNCING") {
-    return <p>"syncing..."</p>;
+    return <span className="syncer">"syncing..."</span>;
   }
 
-  return <p>last synced at {state.lastSyncTime}</p>;
+  return <span className="syncer">last synced at {state.lastSyncTime}</span>;
 };

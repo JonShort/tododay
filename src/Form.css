@@ -1,7 +1,10 @@
 .todos-container {
   display: flex;
   flex-direction: column;
-  padding: 2vh 2vw;
+  flex-grow: 1;
+  margin: 6vh 0;
+  overflow: auto;
+  padding: 0 2vw;
 }
 
 .todo {
@@ -16,19 +19,21 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
-.todo input {
-  margin-right: 3vw;
-}
-
 .todo .todo__content {
   cursor: pointer;
   flex-grow: 1;
+  padding: 0.7rem;
+}
+
+.button__del {
+  padding: 0.5rem 1rem;
+  color:rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .sync-container {
-  bottom: 0;
-  color:rgba(255, 255, 255, 0.5);
+  color:rgba(255, 255, 255, 0.3);
   font-size: 0.8rem;
-  position: absolute;
-  right: 10px;
+  padding-top: 0.5rem;
+  text-align: right;
 }
