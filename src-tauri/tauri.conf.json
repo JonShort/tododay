@@ -1,71 +1,71 @@
 {
-    "build": {
-      "beforeDevCommand": "npm run dev",
-      "beforeBuildCommand": "npm run build",
-      "devPath": "http://localhost:1420",
-      "distDir": "../dist",
-      "withGlobalTauri": false
-    },
-    "package": {
-      "productName": "tododay",
-      "version": "0.0.1"
-    },
-    "tauri": {
-      "allowlist": {
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
+  "package": {
+    "productName": "tododay",
+    "version": "0.0.1"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
         "all": false,
-        "shell": {
-          "all": false,
-          "open": true
-        }
+        "open": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "Productivity",
+      "copyright": "MIT",
+      "deb": {
+        "depends": []
       },
-      "bundle": {
-        "active": true,
-        "category": "DeveloperTool",
-        "copyright": "",
-        "deb": {
-          "depends": []
-        },
-        "externalBin": [],
-        "icon": [
-          "icons/32x32.png",
-          "icons/128x128.png",
-          "icons/128x128@2x.png",
-          "icons/icon.icns",
-          "icons/icon.ico"
-        ],
-        "identifier": "com.tododay.dev",
-        "longDescription": "",
-        "macOS": {
-          "entitlements": null,
-          "exceptionDomain": "",
-          "frameworks": [],
-          "providerShortName": null,
-          "signingIdentity": null
-        },
-        "resources": [],
-        "shortDescription": "",
-        "targets": "all",
-        "windows": {
-          "certificateThumbprint": null,
-          "digestAlgorithm": "sha256",
-          "timestampUrl": ""
-        }
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.tododay.dev",
+      "longDescription": "A todo app where completed todos are removed at the start of each day.",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "license": "LICENSE",
+        "providerShortName": null,
+        "signingIdentity": null
       },
-      "security": {
-        "csp": null
-      },
-      "updater": {
-        "active": false
-      },
-      "windows": [
-        {
-          "fullscreen": false,
-          "height": 700,
-          "resizable": true,
-          "title": "tododay",
-          "width": 500
-        }
-      ]
-    }
+      "resources": [],
+      "shortDescription": "Sensible daily todos",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 700,
+        "resizable": true,
+        "title": "tododay",
+        "width": 500
+      }
+    ]
   }
-  
+}
