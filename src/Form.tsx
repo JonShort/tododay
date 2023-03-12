@@ -1,5 +1,6 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { useForm } from "react-hook-form";
+import { appWindow } from "@tauri-apps/api/window";
 
 import { appStateReducer } from "./appStateReducer";
 import { Syncer } from "./Syncer";
@@ -12,7 +13,19 @@ type Props = {
 
 export const Form = ({ initialFormState = {} }: Props) => {
   const [state, dispatch] = useReducer(appStateReducer, initialFormState);
-  const { register, reset, handleSubmit } = useForm<FormValues>();
+  const { register, reset, handleSubmit, setFocus } = useForm<FormValues>();
+
+  useEffect(() => {
+    const unlisten = appWindow.onFocusChanged(({ payload: focused }) => {
+      if (focused) {
+        setFocus("todo");
+      }
+    });
+
+    return () => {
+      unlisten.then((f) => f());
+    };
+  }, []);
 
   const onSubmit = handleSubmit(({ todo }) => {
     const content = todo.trim();
