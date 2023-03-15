@@ -1,10 +1,36 @@
 .todos-container {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
   margin: 6vh 0;
   overflow: auto;
   padding: 0 2vw;
+
+  /* https://css-tricks.com/books/greatest-css-tricks/scroll-shadows/ */
+  background:
+    /* Shadow Cover TOP */ linear-gradient(
+        var(--bkg) 30%,
+        rgba(255, 255, 255, 0)
+      )
+      center top,
+    /* Shadow Cover BOTTOM */
+      linear-gradient(rgba(255, 255, 255, 0), var(--bkg) 70%) center bottom,
+    /* Shadow TOP */
+      radial-gradient(
+        farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+      )
+      center top,
+    /* Shadow BOTTOM */
+      radial-gradient(
+        farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+      )
+      center bottom;
+
+  background-repeat: no-repeat;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-attachment: local, local, scroll, scroll;
 }
 
 .todo {
@@ -15,7 +41,8 @@
   padding: 1vh 2vw;
 }
 
-.todo:hover, .todo:focus-within {
+.todo:hover,
+.todo:focus-within {
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -27,12 +54,12 @@
 
 .button__del {
   padding: 0.5rem 1rem;
-  color:rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.3);
+  color: rgba(var(--color-rgb), 0.2);
+  background: rgba(var(--bkg-rgb), 0.3);
 }
 
 .sync-container {
-  color:rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.3);
   font-size: 0.8rem;
   padding-top: 0.5rem;
   text-align: right;
