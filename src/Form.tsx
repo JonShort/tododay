@@ -25,7 +25,7 @@ export const Form = ({ initialFormState = {} }: Props) => {
     return () => {
       unlisten.then((f) => f());
     };
-  }, []);
+  }, [setFocus]);
 
   const onSubmit = handleSubmit(({ todo }) => {
     const content = todo.trim();

@@ -50,18 +50,14 @@ export const Syncer = ({ appState }: Props) => {
 
   useEffect(() => {
     dispatch("START_SYNCING");
+
+    invoke("sync", { content: JSON.stringify(appState) }).then(() => {
+      dispatch("FINISH_SYNCING");
+    });
   }, [appState]);
 
-  useEffect(() => {
-    if (state.syncStatus === "SYNCING") {
-      invoke("sync", { content: JSON.stringify(appState) }).then(() => {
-        dispatch("FINISH_SYNCING");
-      });
-    }
-  }, [state.syncStatus]);
-
   if (state.syncStatus === "SYNCING") {
-    return <span className="syncer">"syncing..."</span>;
+    return <span className="syncer">syncing...</span>;
   }
 
   return <span className="syncer">last synced at {state.lastSyncTime}</span>;

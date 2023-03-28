@@ -11,23 +11,17 @@ function App() {
   useEffect(() => {
     invoke<string>("get_todos").then((todos) => {
       const stateObj = JSON.parse(todos) as AppState;
-  
+
       formStateRef.current = stateObj;
       setIsLoaded(true);
     });
   }, []);
 
   if (!isLoaded) {
-    return (
-      <div className="container">
-        ...Setting up tododay
-      </div>
-    );
+    return <div className="container">...Setting up tododay</div>;
   }
 
-  return (
-    <Form initialFormState={formStateRef.current} />
-  );
+  return <Form initialFormState={formStateRef.current} />;
 }
 
 export default App;
