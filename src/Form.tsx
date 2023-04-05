@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { appWindow } from "@tauri-apps/api/window";
 
 import { appStateReducer } from "./appStateReducer";
+import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
 import { Syncer } from "./Syncer";
 import type { AppState, FormValues } from "./types";
 import "./Form.css";
@@ -14,6 +15,8 @@ type Props = {
 export const Form = ({ initialFormState = {} }: Props) => {
   const [state, dispatch] = useReducer(appStateReducer, initialFormState);
   const { register, reset, handleSubmit, setFocus } = useForm<FormValues>();
+
+  useKeyboardNavigation();
 
   useEffect(() => {
     const unlisten = appWindow.onFocusChanged(({ payload: focused }) => {
@@ -66,14 +69,15 @@ export const Form = ({ initialFormState = {} }: Props) => {
       </div>
 
       <div className="todos-container">
-        {Object.keys(state).map((todoId) => {
+        {Object.keys(state).map((todoId, idx) => {
           const { content, isComplete } = state[todoId];
           return (
             <label className="todo" key={todoId}>
               <input
-                onChange={() => handleCheck(todoId, isComplete)}
                 checked={isComplete}
                 id={todoId}
+                data-n={idx}
+                onChange={() => handleCheck(todoId, isComplete)}
                 type="checkbox"
               />
               <span className="todo__content">{content}</span>
