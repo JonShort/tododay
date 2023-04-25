@@ -35,7 +35,7 @@
 
 .todo {
   align-items: center;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(var(--color-rgb), 0.3);
   cursor: pointer;
   display: flex;
   padding: 1vh 2vw;
@@ -43,7 +43,7 @@
 
 .todo:hover,
 .todo:focus-within {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(var(--color-rgb), 0.2);
 }
 
 .todo .todo__content {
