@@ -16,15 +16,15 @@
     /* Shadow TOP */
       radial-gradient(
         farthest-side at 50% 0,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0)
+        rgba(var(--color-rgb), 0.3),
+        rgba(var(--color-rgb), 0)
       )
       center top,
     /* Shadow BOTTOM */
       radial-gradient(
         farthest-side at 50% 100%,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0)
+        rgba(var(--color-rgb), 0.3),
+        rgba(var(--color-rgb), 0)
       )
       center bottom;
 
