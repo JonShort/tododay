@@ -24,6 +24,11 @@ export const useKeyboardNavigation = () => {
         const handleKeyDown = (event: KeyboardEvent) => {
             const { key } = event;
 
+            if (key === "Escape") {
+                (document.activeElement as HTMLElement)?.blur?.()
+                return;
+            }
+
             if (key !== "ArrowUp" && key !== "ArrowDown") {
                 return;
             }
