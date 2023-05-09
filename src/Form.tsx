@@ -8,11 +8,11 @@ import type { AppState } from "./types";
 import "./Form.css";
 
 type Props = {
-  initialFormState: AppState;
+  initialTodos: AppState;
 };
 
-export const Form = ({ initialFormState = {} }: Props) => {
-  const [state, dispatch] = useReducer(appStateReducer, initialFormState);
+export const Form = ({ initialTodos = {} }: Props) => {
+  const [state, dispatch] = useReducer(appStateReducer, initialTodos);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
