@@ -1,48 +1,51 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { appWindow } from "@tauri-apps/api/window";
 
 import { appStateReducer } from "./appStateReducer";
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
 import { Syncer } from "./Syncer";
-import type { AppState, FormValues } from "./types";
+import type { AppState } from "./types";
 import "./Form.css";
 
 type Props = {
-  initialFormState: AppState;
+  initialTodos: AppState;
 };
 
-export const Form = ({ initialFormState = {} }: Props) => {
-  const [state, dispatch] = useReducer(appStateReducer, initialFormState);
-  const { register, reset, handleSubmit, setFocus } = useForm<FormValues>();
+export const Form = ({ initialTodos = {} }: Props) => {
+  const [state, dispatch] = useReducer(appStateReducer, initialTodos);
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useKeyboardNavigation();
 
   useEffect(() => {
     const unlisten = appWindow.onFocusChanged(({ payload: focused }) => {
       if (focused) {
-        setFocus("todo");
+        inputRef.current?.focus();
       }
     });
 
     return () => {
       unlisten.then((f) => f());
     };
-  }, [setFocus]);
+  }, []);
 
-  const onSubmit = handleSubmit(({ todo }) => {
-    const content = todo.trim();
+  const handleSubmit = useCallback((ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
 
-    if (!content) {
+    const data = new FormData(ev.currentTarget);
+    const content = data.get("todo");
+
+    if (typeof content !== "string" || !content.trim()) {
       return;
     }
 
     dispatch({
       type: "ADD",
-      content,
+      content: content.trim(),
     });
-    reset();
-  });
+    formRef.current?.reset();
+  }, []);
 
   const handleCheck = useCallback((id: string, isComplete: boolean) => {
     const type = isComplete ? "UNCOMPLETE" : "COMPLETE";
@@ -62,8 +65,8 @@ export const Form = ({ initialFormState = {} }: Props) => {
   return (
     <div className="container">
       <div className="row">
-        <form onSubmit={onSubmit} method="POST">
-          <input {...register("todo")} placeholder="Enter your todo..." />
+        <form onSubmit={handleSubmit} method="POST" ref={formRef}>
+          <input name="todo" placeholder="Enter your todo..." ref={inputRef} />
           <button type="submit">Add</button>
         </form>
       </div>

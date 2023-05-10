@@ -21,7 +21,7 @@ function App() {
     return <div className="container">...Setting up tododay</div>;
   }
 
-  return <Form initialFormState={formStateRef.current} />;
+  return <Form initialTodos={formStateRef.current} />;
 }
 
 export default App;
