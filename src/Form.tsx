@@ -75,7 +75,30 @@ export const Form = ({ initialTodos = {} }: Props) => {
         {Object.keys(state).map((todoId, idx) => {
           const { content, isComplete } = state[todoId];
           return (
-            <label className="todo" key={todoId}>
+            <label
+              className="todo"
+              draggable
+              onDragOver={(ev) => ev.preventDefault()}
+              onDragStart={(ev) => {
+                ev.dataTransfer.setData("id", todoId);
+                ev.dataTransfer.effectAllowed = "move";
+              }}
+              onDrop={(ev) => {
+                ev.preventDefault();
+                const dropId = ev.dataTransfer.getData("id");
+
+                if (!dropId) {
+                  return;
+                }
+
+                dispatch({
+                  destinationIndex: idx,
+                  id: dropId,
+                  type: "MOVE",
+                });
+              }}
+              key={todoId}
+            >
               <input
                 checked={isComplete}
                 id={todoId}
