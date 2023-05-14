@@ -18,7 +18,13 @@ export type REMOVE = {
     type: "REMOVE",
 };
 
-export type Action = ADD | COMPLETE | UNCOMPLETE | REMOVE;
+export type MOVE = {
+    destinationIndex: number,
+    id: string,
+    type: "MOVE",
+}
+
+export type Action = ADD | COMPLETE | UNCOMPLETE | REMOVE | MOVE;
 
 export type StateItem = {
     addedAt: number,
