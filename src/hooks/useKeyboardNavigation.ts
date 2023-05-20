@@ -1,25 +1,29 @@
 import { useEffect } from "react";
 
-const getFocusedN = (): number | null => {
+import { MOVE } from '../types';
+
+const getFocusedN = (): { idx: number | null, id: string | null } => {
     const focused = document.querySelector("input[data-n]:focus");
 
     if (!focused) {
-        return null;
+        return {
+            idx: null,
+            id: null,
+        };
     }
 
     const attrVal = focused.getAttribute("data-n");
+    const id = focused.getAttribute("id");
 
-
-    if (!attrVal) {
-        return null;
-    }
-
-    return parseInt(attrVal);
+    return {
+        id: id ?? null,
+        idx: attrVal ? parseInt(attrVal) : null,
+    };
 };
 
 const getAllCheckboxes = (): NodeListOf<HTMLInputElement> => document.querySelectorAll("input[data-n]");
 
-export const useKeyboardNavigation = () => {
+export const useKeyboardNavigation = (dispatch: React.Dispatch<MOVE>) => {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             const { key } = event;
@@ -40,28 +44,77 @@ export const useKeyboardNavigation = () => {
                 return;
             }
 
-            const focusedN = getFocusedN();
+            const isOptionDepressed = event.getModifierState("Alt");
+            const { id, idx } = getFocusedN();
+
+            if (isOptionDepressed) {
+                // No checkbox focused - skip
+                if (idx === null || !id) {
+                    return;
+                }
+
+                if (key === "ArrowUp") {
+                    // first checkbox should overflow to bottom of list
+                    if (idx === 0) {
+                        dispatch({
+                            destinationIndex: checkboxes.length - 1,
+                            id: id,
+                            type: "MOVE",
+                        })
+                    } else {
+                        dispatch({
+                            destinationIndex: idx - 1,
+                            id: id,
+                            type: "MOVE",
+                        })
+                    }
+
+                    return;
+                }
+    
+                if (key === "ArrowDown") {
+                    // last checkbox should overflow to top of list
+                    if (idx === checkboxes.length - 1) {
+                        dispatch({
+                            destinationIndex: 0,
+                            id: id,
+                            type: "MOVE",
+                        })
+                    } else {
+                        dispatch({
+                            destinationIndex: idx + 1,
+                            id: id,
+                            type: "MOVE",
+                        })
+                    }
+
+                    return;
+                }
+            }
 
             if (key === "ArrowUp") {
                 // null or 0
-                if (!focusedN) {
-                    // last checkbox
+                if (!idx) {
                     checkboxes[checkboxes.length - 1].focus();
                 } else {
                     // 1 prior
-                    checkboxes[focusedN - 1].focus();
+                    checkboxes[idx - 1].focus();
                 }
+
+                return;
             }
 
             if (key === "ArrowDown") {
                 // not focused or last item focused
-                if (focusedN === null || focusedN === checkboxes.length - 1) {
+                if (idx === null || idx === checkboxes.length - 1) {
                     // first checkbox
                     checkboxes[0].focus();
                 } else {
                     // 1 after
-                    checkboxes[focusedN + 1].focus();
+                    checkboxes[idx + 1].focus();
                 }
+
+                return;
             }
         }
 
@@ -70,5 +123,5 @@ export const useKeyboardNavigation = () => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    });
+    }, [dispatch]);
 };

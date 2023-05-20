@@ -16,7 +16,7 @@ export const Form = ({ initialTodos = {} }: Props) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useKeyboardNavigation();
+  useKeyboardNavigation(dispatch);
 
   useEffect(() => {
     const unlisten = appWindow.onFocusChanged(({ payload: focused }) => {
