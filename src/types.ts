@@ -1,3 +1,5 @@
+import UndoHolder from "./undo";
+
 export type ADD = {
     content: string,
     type: "ADD",
@@ -16,6 +18,7 @@ export type UNCOMPLETE = {
 export type REMOVE = {
     id: string,
     type: "REMOVE",
+    undoHolder: UndoHolder
 };
 
 export type MOVE = {

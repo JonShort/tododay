@@ -6,10 +6,13 @@ import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
 import { Syncer } from "./Syncer";
 import type { AppState } from "./types";
 import "./Form.css";
+import UndoHolder from "./undo";
 
 type Props = {
   initialTodos: AppState;
 };
+
+const undoHolder = new UndoHolder();
 
 export const Form = ({ initialTodos = {} }: Props) => {
   const [state, dispatch] = useReducer(appStateReducer, initialTodos);
@@ -25,8 +28,11 @@ export const Form = ({ initialTodos = {} }: Props) => {
       }
     });
 
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
       unlisten.then((f) => f());
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -59,7 +65,25 @@ export const Form = ({ initialTodos = {} }: Props) => {
     dispatch({
       type: "REMOVE",
       id,
+      undoHolder: undoHolder
     });
+  }, []);
+
+  const handleKeyDown = useCallback((e) => {
+    const evtobj = window.event ? event : e;
+    if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+      handleUndo();
+    }
+  }, []);
+
+  const handleUndo = useCallback(() => {
+    const result = undoHolder.undo();
+      if (result) {
+      dispatch({
+        type: "ADD",
+        content: result?.content.trim(),
+      });
+    }
   }, []);
 
   return (
