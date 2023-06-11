@@ -62,12 +62,12 @@ export const Form = ({ initialTodos = {} }: Props) => {
   }, []);
 
   const handleRemove = useCallback((id: string) => {
+    undoHolder.add(state[id]);
     dispatch({
       type: "REMOVE",
       id,
-      undoHolder: undoHolder
     });
-  }, []);
+  }, [state]);
 
   const handleKeyDown = useCallback((e) => {
     const evtobj = window.event ? event : e;

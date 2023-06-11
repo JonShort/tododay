@@ -51,11 +51,7 @@ export const appStateReducer = (state: AppState, action: Action) => {
 
     case "REMOVE": {
       const { [action.id]: _pluck, ...otherState } = state;
-      action.undoHolder.add({
-        ..._pluck,
-        id: action.id
-      });
-      return otherState;
+      return {...otherState};
     }
 
     default: {

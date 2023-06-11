@@ -1,27 +1,18 @@
 import { StateItem } from "./types";
 
-export type UndoItem = StateItem & {
-    id: string
-}
-
 class UndoHolder {
-    private stack: UndoItem[] = [];
-    private stackIds: string[] = [];
+    private stack: StateItem[] = [];
 
     constructor () {
         this.stack = [];
     }
 
-    add(item: UndoItem): void {
-        if (!this.stackIds.includes(item.id)) {
-            this.stack.push(item);
-            this.stackIds.push(item.id);
-        }
+    add(item: StateItem): void {
+        this.stack.push(item);
     }
 
-    undo(): UndoItem | null {
+    undo(): StateItem | null {
         const result = this.stack.pop() ?? null;
-        this.stackIds.pop();
         return result;
     }
 }

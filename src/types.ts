@@ -18,7 +18,6 @@ export type UNCOMPLETE = {
 export type REMOVE = {
     id: string,
     type: "REMOVE",
-    undoHolder: UndoHolder
 };
 
 export type MOVE = {
