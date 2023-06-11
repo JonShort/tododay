@@ -51,7 +51,7 @@ export const appStateReducer = (state: AppState, action: Action) => {
 
     case "REMOVE": {
       const { [action.id]: _pluck, ...otherState } = state;
-      return {...otherState};
+      return otherState;
     }
 
     default: {
