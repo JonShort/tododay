@@ -3,29 +3,28 @@
     windows_subsystem = "windows"
 )]
 
-mod filesystem;
-mod handle_todo;
-
-use tauri::Manager;
+mod sql;
 
 #[tauri::command]
-fn get_todos(db: tauri::State<filesystem::DB>) -> String {
-    db.get().unwrap_or(String::from("{}"))
+async fn get_todos(db: tauri::State<'_, sql::DB>) -> Result<String, ()> {
+    Ok(db.get().await.unwrap_or(String::from("{}")))
 }
 
 #[tauri::command]
-fn sync(db: tauri::State<filesystem::DB>, content: String) -> bool {
-    db.save(&content).is_ok()
+async fn sync(db: tauri::State<'_, sql::DB>, id: String, content: String) -> Result<bool, ()> {
+    Ok(db.save(&id, &content).await.is_ok())
 }
 
 fn main() {
-    tauri::Builder::default()
-        .setup(|app| {
-            let db = filesystem::DB::new(app)?;
-            app.manage(db);
-            Ok(())
-        })
-        .invoke_handler(tauri::generate_handler![get_todos, sync])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+    tauri::async_runtime::block_on(async {
+        let db = sql::DB::new().await.unwrap();
+        db.run_migrations().await.unwrap();
+        db.setup_todays_todos().await.unwrap();
+
+        tauri::Builder::default()
+            .manage(db)
+            .invoke_handler(tauri::generate_handler![get_todos, sync])
+            .run(tauri::generate_context!())
+            .expect("error while running tauri application");
+    });
 }
