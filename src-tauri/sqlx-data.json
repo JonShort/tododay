@@ -1,0 +1,81 @@
+{
+  "db": "SQLite",
+  "213035bb42360b4d8125f5684290b20b300432b81af44060f963c60f006c3d3f": {
+    "describe": {
+      "columns": [
+        {
+          "name": "iso_date",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT iso_date FROM dates WHERE iso_date = $1"
+  },
+  "309c136057f4d7ffb74aedb6927037699b571810f2270d67cec037f1339e617c": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 4
+      }
+    },
+    "query": "\n            INSERT INTO dates (iso_date, day, month, year)\n            VALUES ($1, $2, $3, $4)\n            "
+  },
+  "36ee89f4825522405cb247f618927510654a6a4b30861bb0d7ad801d0dd8d2c7": {
+    "describe": {
+      "columns": [
+        {
+          "name": "todo_id",
+          "ordinal": 0,
+          "type_info": "Text"
+        },
+        {
+          "name": "content",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "is_complete",
+          "ordinal": 2,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT todo_id,content,is_complete FROM todos WHERE modify_date = $1"
+  },
+  "d5056d65222bebed1d0a43f294e6f68572fa474b9a8e7c9e61c80f619b4431f6": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "\n            UPDATE todos SET modify_date = $1 WHERE is_complete = 0\n            "
+  },
+  "e44ac7ede5d3b5ff3d84eb2905d4f62253d0dba6d4b571cad9588e6867224635": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 5
+      }
+    },
+    "query": "\n            INSERT INTO todos (todo_id, is_complete, content, modify_date, create_date)\n            VALUES ($1, $2, $3, $4, $5)\n            "
+  }
+}
