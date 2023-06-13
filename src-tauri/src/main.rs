@@ -15,6 +15,21 @@ async fn add_todo(db: tauri::State<'_, sql::DB>, id: String, content: String) ->
     Ok(db.save(&id, &content).await.is_ok())
 }
 
+#[tauri::command]
+async fn complete_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
+    Ok(db.complete(&id).await.is_ok())
+}
+
+#[tauri::command]
+async fn uncomplete_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
+    Ok(db.uncomplete(&id).await.is_ok())
+}
+
+#[tauri::command]
+async fn remove_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
+    Ok(db.remove(&id).await.is_ok())
+}
+
 fn main() {
     tauri::async_runtime::block_on(async {
         let db = sql::DB::new().await.unwrap();
@@ -23,7 +38,13 @@ fn main() {
 
         tauri::Builder::default()
             .manage(db)
-            .invoke_handler(tauri::generate_handler![get_todos, add_todo])
+            .invoke_handler(tauri::generate_handler![
+                add_todo,
+                complete_todo,
+                get_todos,
+                remove_todo,
+                uncomplete_todo
+            ])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");
     });

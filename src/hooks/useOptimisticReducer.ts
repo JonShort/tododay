@@ -70,6 +70,27 @@ const mirrorInDb = (action: Action) => {
             break;
         }
 
+        case "COMPLETE": {
+          invoke("complete_todo", { id: action.id }).then(() => {
+            // nothing
+          })
+          break;
+        }
+
+        case "UNCOMPLETE": {
+          invoke("uncomplete_todo", { id: action.id }).then(() => {
+            // nothing
+          })
+          break;
+        }
+
+        case "REMOVE": {
+          invoke("remove_todo", { id: action.id }).then(() => {
+            // nothing
+          })
+          break;
+        }
+
         default: {
             break;
         }

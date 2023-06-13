@@ -124,6 +124,45 @@ impl DB {
         Ok(())
     }
 
+    pub async fn complete(&self, id: &str) -> Result<(), DbError> {
+        sqlx::query!(
+            "
+            UPDATE todos SET is_complete = 1 WHERE todo_id = $1
+            ",
+            id
+        )
+        .execute(&self.connection_pool)
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn uncomplete(&self, id: &str) -> Result<(), DbError> {
+        sqlx::query!(
+            "
+            UPDATE todos SET is_complete = 0 WHERE todo_id = $1
+            ",
+            id
+        )
+        .execute(&self.connection_pool)
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn remove(&self, id: &str) -> Result<(), DbError> {
+        sqlx::query!(
+            "
+            DELETE FROM todos WHERE todo_id = $1
+            ",
+            id
+        )
+        .execute(&self.connection_pool)
+        .await?;
+
+        Ok(())
+    }
+
     pub async fn get(&self) -> Result<String, DbError> {
         let iso = self.today_iso_date.to_string();
         let todays_todos = sqlx::query!(
