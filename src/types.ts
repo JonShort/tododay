@@ -1,5 +1,6 @@
 export type ADD = {
     content: string,
+    id: string,
     type: "ADD",
 };
 
@@ -39,3 +40,5 @@ export type AppState = {
 export type FormValues = {
     todo: string,
 };
+
+export type OptimisticDispatch<A> = (value: A) => void;

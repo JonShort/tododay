@@ -11,7 +11,7 @@ async fn get_todos(db: tauri::State<'_, sql::DB>) -> Result<String, ()> {
 }
 
 #[tauri::command]
-async fn sync(db: tauri::State<'_, sql::DB>, id: String, content: String) -> Result<bool, ()> {
+async fn add_todo(db: tauri::State<'_, sql::DB>, id: String, content: String) -> Result<bool, ()> {
     Ok(db.save(&id, &content).await.is_ok())
 }
 
@@ -23,7 +23,7 @@ fn main() {
 
         tauri::Builder::default()
             .manage(db)
-            .invoke_handler(tauri::generate_handler![get_todos, sync])
+            .invoke_handler(tauri::generate_handler![get_todos, add_todo])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");
     });

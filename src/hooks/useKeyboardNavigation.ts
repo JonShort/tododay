@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { MOVE } from '../types';
+import { MOVE, OptimisticDispatch } from '../types';
 
 const getFocusedN = (): { idx: number | null, id: string | null } => {
     const focused = document.querySelector("input[data-n]:focus");
@@ -23,7 +23,7 @@ const getFocusedN = (): { idx: number | null, id: string | null } => {
 
 const getAllCheckboxes = (): NodeListOf<HTMLInputElement> => document.querySelectorAll("input[data-n]");
 
-export const useKeyboardNavigation = (dispatch: React.Dispatch<MOVE>) => {
+export const useKeyboardNavigation = (dispatch: React.Dispatch<MOVE> | OptimisticDispatch<MOVE>) => {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             const { key } = event;
