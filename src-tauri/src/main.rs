@@ -7,7 +7,12 @@ mod sql;
 
 #[tauri::command]
 async fn get_todos(db: tauri::State<'_, sql::DB>) -> Result<String, ()> {
-    Ok(db.get().await.unwrap_or(String::from("{}")))
+    Ok(db.get_todos().await.unwrap_or(String::from("{}")))
+}
+
+#[tauri::command]
+async fn get_ordering(db: tauri::State<'_, sql::DB>) -> Result<String, ()> {
+    Ok(db.get_ordering().await.unwrap_or(String::from("[]")))
 }
 
 #[tauri::command]
@@ -41,6 +46,7 @@ fn main() {
             .invoke_handler(tauri::generate_handler![
                 add_todo,
                 complete_todo,
+                get_ordering,
                 get_todos,
                 remove_todo,
                 uncomplete_todo

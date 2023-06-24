@@ -163,7 +163,18 @@ impl DB {
         Ok(())
     }
 
-    pub async fn get(&self) -> Result<String, DbError> {
+    pub async fn get_ordering(&self) -> Result<String, DbError> {
+        let ordering = sqlx::query!(
+            "SELECT current FROM ordering WHERE order_id = $1 LIMIT 1",
+            1
+        )
+        .fetch_one(&self.connection_pool)
+        .await?;
+
+        Ok(ordering.current)
+    }
+
+    pub async fn get_todos(&self) -> Result<String, DbError> {
         let iso = self.today_iso_date.to_string();
         let todays_todos = sqlx::query!(
             "SELECT todo_id,content,is_complete FROM todos WHERE modify_date = $1",
