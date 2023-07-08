@@ -9,12 +9,45 @@ function App() {
   const formStateRef = useRef<AppState>({});
 
   useEffect(() => {
-    invoke<string>("get_todos").then((todos) => {
-      const stateObj = JSON.parse(todos) as AppState;
+    Promise.all([invoke<string>("get_todos"), invoke<string>("get_ordering")])
+      .then(([todos, ordering]) => {
+        const stateObj = JSON.parse(todos) as AppState;
+        const orderingArr = JSON.parse(ordering) as string[];
 
-      formStateRef.current = stateObj;
-      setIsLoaded(true);
-    });
+        const sortedKeys = Object.keys(stateObj).sort((a, b) => {
+          const indexA = orderingArr.indexOf(a);
+          const indexB = orderingArr.indexOf(b);
+
+          // If both elements are present in the sorting order array,
+          // compare their indices in the sorting order
+          if (indexA !== -1 && indexB !== -1) {
+            return indexA - indexB;
+          }
+
+          // If only one of the elements is present in the sorting order,
+          // prioritize the one that is present
+          if (indexA !== -1) {
+            return -1;
+          }
+          if (indexB !== -1) {
+            return 1;
+          }
+
+          // If neither element is present in the sorting order,
+          // maintain their original order
+          return 0;
+        });
+
+        const newStateObj = sortedKeys.reduce<AppState>((acc, curr) => {
+          acc[curr] = stateObj[curr];
+          return acc;
+        }, {});
+
+        formStateRef.current = newStateObj;
+      })
+      .finally(() => {
+        setIsLoaded(true);
+      });
   }, []);
 
   if (!isLoaded) {
