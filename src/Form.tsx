@@ -3,7 +3,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import { nanoid } from "nanoid";
 
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
-// import { Syncer } from "./Syncer";
+import { Syncer } from "./Syncer";
 import { useOptimisticReducer } from "./hooks/useOptimisticReducer";
 import type { AppState } from "./types";
 import "./Form.css";
@@ -129,7 +129,9 @@ export const Form = ({ initialTodos = {} }: Props) => {
         })}
       </div>
 
-      <div className="sync-container">{/* <Syncer appState={state} /> */}</div>
+      <div className="sync-container">
+        <Syncer appState={state} />
+      </div>
     </div>
   );
 };
