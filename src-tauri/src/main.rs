@@ -35,6 +35,11 @@ async fn remove_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, 
     Ok(db.remove(&id).await.is_ok())
 }
 
+#[tauri::command]
+async fn set_ordering(db: tauri::State<'_, sql::DB>, order: String) -> Result<bool, ()> {
+    Ok(db.set_ordering(&order).await.is_ok())
+}
+
 fn main() {
     tauri::async_runtime::block_on(async {
         let db = sql::DB::new().await.unwrap();
@@ -49,6 +54,7 @@ fn main() {
                 get_ordering,
                 get_todos,
                 remove_todo,
+                set_ordering,
                 uncomplete_todo
             ])
             .run(tauri::generate_context!())

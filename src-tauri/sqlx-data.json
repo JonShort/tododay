@@ -68,6 +68,16 @@
     },
     "query": "\n            UPDATE todos SET is_complete = 1 WHERE todo_id = $1\n            "
   },
+  "538761220d4999fdec0630ce60a4e25bd10cf0e406901c855c08009ee1506b66": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "\n            UPDATE ordering SET current = $1 WHERE order_id = 1\n            "
+  },
   "d5056d65222bebed1d0a43f294e6f68572fa474b9a8e7c9e61c80f619b4431f6": {
     "describe": {
       "columns": [],

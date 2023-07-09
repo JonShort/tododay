@@ -174,6 +174,19 @@ impl DB {
         Ok(ordering.current)
     }
 
+    pub async fn set_ordering(&self, order: &str) -> Result<(), DbError> {
+        sqlx::query!(
+            "
+            UPDATE ordering SET current = $1 WHERE order_id = 1
+            ",
+            order
+        )
+        .execute(&self.connection_pool)
+        .await?;
+
+        Ok(())
+    }
+
     pub async fn get_todos(&self) -> Result<String, DbError> {
         let iso = self.today_iso_date.to_string();
         let todays_todos = sqlx::query!(
