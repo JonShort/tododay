@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid";
 
 import type { Action, AppState } from "./types";
 
@@ -37,7 +37,7 @@ export const appStateReducer = (state: AppState, action: Action) => {
 
     case "MOVE": {
       const { [action.id]: todoToMove, ...otherState } = state;
-      
+
       const listOfTodos = Object.entries(otherState);
       listOfTodos.splice(action.destinationIndex, 0, [action.id, todoToMove]);
 
