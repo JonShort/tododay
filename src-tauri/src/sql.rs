@@ -20,6 +20,8 @@ impl DB {
             None => return Err(DbError),
         };
 
+        // It would be best to pull the application name from the tauri config, but it's weirdly difficult
+        // pre-setup - for now this is hardcoded
         let app_data_dir = app_data_dir.join("com.tododay.dev");
 
         // Tauri doesn't create the $APPDATA directory automatically,
