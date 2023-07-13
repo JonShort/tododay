@@ -17,22 +17,22 @@ async fn get_ordering(db: tauri::State<'_, sql::DB>) -> Result<String, ()> {
 
 #[tauri::command]
 async fn add_todo(db: tauri::State<'_, sql::DB>, id: String, content: String) -> Result<bool, ()> {
-    Ok(db.save(&id, &content).await.is_ok())
+    Ok(db.add_todo(&id, &content).await.is_ok())
 }
 
 #[tauri::command]
 async fn complete_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
-    Ok(db.complete(&id).await.is_ok())
+    Ok(db.complete_todo(&id).await.is_ok())
 }
 
 #[tauri::command]
 async fn uncomplete_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
-    Ok(db.uncomplete(&id).await.is_ok())
+    Ok(db.uncomplete_todo(&id).await.is_ok())
 }
 
 #[tauri::command]
 async fn remove_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
-    Ok(db.remove(&id).await.is_ok())
+    Ok(db.remove_todo(&id).await.is_ok())
 }
 
 #[tauri::command]

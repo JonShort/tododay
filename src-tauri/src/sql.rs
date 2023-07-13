@@ -107,7 +107,7 @@ impl DB {
         Ok(())
     }
 
-    pub async fn save(&self, id: &str, content: &str) -> Result<(), DbError> {
+    pub async fn add_todo(&self, id: &str, content: &str) -> Result<(), DbError> {
         let iso = self.today_iso_date.to_string();
         sqlx::query!(
             "
@@ -126,7 +126,7 @@ impl DB {
         Ok(())
     }
 
-    pub async fn complete(&self, id: &str) -> Result<(), DbError> {
+    pub async fn complete_todo(&self, id: &str) -> Result<(), DbError> {
         sqlx::query!(
             "
             UPDATE todos SET is_complete = 1 WHERE todo_id = $1
@@ -139,7 +139,7 @@ impl DB {
         Ok(())
     }
 
-    pub async fn uncomplete(&self, id: &str) -> Result<(), DbError> {
+    pub async fn uncomplete_todo(&self, id: &str) -> Result<(), DbError> {
         sqlx::query!(
             "
             UPDATE todos SET is_complete = 0 WHERE todo_id = $1
@@ -152,7 +152,7 @@ impl DB {
         Ok(())
     }
 
-    pub async fn remove(&self, id: &str) -> Result<(), DbError> {
+    pub async fn remove_todo(&self, id: &str) -> Result<(), DbError> {
         sqlx::query!(
             "
             DELETE FROM todos WHERE todo_id = $1
