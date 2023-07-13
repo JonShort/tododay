@@ -1,5 +1,5 @@
 use chrono::{Local, NaiveDate};
-use sqlx::{self, Pool, Sqlite};
+use sqlx::{Pool, Sqlite};
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::{error, fmt, fs};
@@ -42,7 +42,7 @@ impl DB {
             .acquire_timeout(std::time::Duration::from_secs(2))
             .connect_lazy_with(connect_options);
 
-        let mut save_file = app_data_dir.clone();
+        let mut save_file = app_data_dir;
         save_file.push(format!("{}.json", Local::now().date_naive()));
 
         Ok(Self {
@@ -213,7 +213,7 @@ impl DB {
         // For now we'll ignore errors and return an empty object instead
         let json_string = serde_json::to_string(&hashmap).unwrap_or(String::from("{}"));
 
-        Ok(String::from(json_string))
+        Ok(json_string)
     }
 }
 
