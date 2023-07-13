@@ -229,7 +229,7 @@ pub struct DbError;
 
 impl fmt::Display for DbError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "unable to connect to save location")
+        write!(f, "error communicating with the SQL database")
     }
 }
 
