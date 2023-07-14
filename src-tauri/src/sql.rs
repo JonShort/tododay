@@ -64,9 +64,12 @@ impl DB {
 
     pub async fn setup_todays_todos(&self) -> Result<(), DbError> {
         let iso = self.today_iso_date.to_string();
-        let a = sqlx::query!("SELECT iso_date FROM dates WHERE iso_date = $1", iso)
-            .fetch_optional(&self.connection_pool)
-            .await?;
+        let a = sqlx::query!(
+            "SELECT iso_date FROM dates WHERE iso_date = $1 LIMIT 1",
+            iso
+        )
+        .fetch_optional(&self.connection_pool)
+        .await?;
 
         if a.is_some() {
             // day entry exists, assume the day has already been setup

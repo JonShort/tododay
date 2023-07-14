@@ -1,23 +1,5 @@
 {
   "db": "SQLite",
-  "213035bb42360b4d8125f5684290b20b300432b81af44060f963c60f006c3d3f": {
-    "describe": {
-      "columns": [
-        {
-          "name": "iso_date",
-          "ordinal": 0,
-          "type_info": "Text"
-        }
-      ],
-      "nullable": [
-        false
-      ],
-      "parameters": {
-        "Right": 1
-      }
-    },
-    "query": "SELECT iso_date FROM dates WHERE iso_date = $1"
-  },
   "309c136057f4d7ffb74aedb6927037699b571810f2270d67cec037f1339e617c": {
     "describe": {
       "columns": [],
@@ -135,5 +117,23 @@
       }
     },
     "query": "SELECT current FROM ordering WHERE order_id = $1 LIMIT 1"
+  },
+  "ffecbc955d0462ccab2186fabe043200480fee7192624a0164160e0e1a163db1": {
+    "describe": {
+      "columns": [
+        {
+          "name": "iso_date",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT iso_date FROM dates WHERE iso_date = $1 LIMIT 1"
   }
 }
