@@ -18,6 +18,10 @@ At the moment this project is compile-from-source only :raised_hands:
 
 For installation instructions, see the "Development" section below
 
+## Architecture
+
+Documentation around the architecture of this application can be found in the [architecture directory](./architecture/)
+
 ## Development
 
 Make sure [rust](https://www.rust-lang.org/) and [cargo](https://doc.rust-lang.org/cargo/) are installed - ([installation guide](https://doc.rust-lang.org/cargo/getting-started/installation.html))
