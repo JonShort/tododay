@@ -51,7 +51,9 @@ export const Syncer = ({ appState }: Props) => {
   useEffect(() => {
     dispatch("START_SYNCING");
 
-    invoke("sync", { content: JSON.stringify(appState) }).then(() => {
+    invoke("set_ordering", {
+      order: JSON.stringify(Object.keys(appState)),
+    }).then(() => {
       dispatch("FINISH_SYNCING");
     });
   }, [appState]);

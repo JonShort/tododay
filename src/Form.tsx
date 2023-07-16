@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { appWindow } from "@tauri-apps/api/window";
+import { nanoid } from "nanoid";
 
-import { appStateReducer } from "./appStateReducer";
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
 import { Syncer } from "./Syncer";
+import { useOptimisticReducer } from "./hooks/useOptimisticReducer";
 import type { AppState } from "./types";
 import "./Form.css";
 
@@ -12,7 +13,7 @@ type Props = {
 };
 
 export const Form = ({ initialTodos = {} }: Props) => {
-  const [state, dispatch] = useReducer(appStateReducer, initialTodos);
+  const [state, dispatch] = useOptimisticReducer(initialTodos);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -30,37 +31,47 @@ export const Form = ({ initialTodos = {} }: Props) => {
     };
   }, []);
 
-  const handleSubmit = useCallback((ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
+  const handleSubmit = useCallback(
+    (ev: React.FormEvent<HTMLFormElement>) => {
+      ev.preventDefault();
 
-    const data = new FormData(ev.currentTarget);
-    const content = data.get("todo");
+      const data = new FormData(ev.currentTarget);
+      const content = data.get("todo");
 
-    if (typeof content !== "string" || !content.trim()) {
-      return;
-    }
+      if (typeof content !== "string" || !content.trim()) {
+        return;
+      }
 
-    dispatch({
-      type: "ADD",
-      content: content.trim(),
-    });
-    formRef.current?.reset();
-  }, []);
+      dispatch({
+        content: content.trim(),
+        id: nanoid(),
+        type: "ADD",
+      });
+      formRef.current?.reset();
+    },
+    [dispatch]
+  );
 
-  const handleCheck = useCallback((id: string, isComplete: boolean) => {
-    const type = isComplete ? "UNCOMPLETE" : "COMPLETE";
-    dispatch({
-      type,
-      id,
-    });
-  }, []);
+  const handleCheck = useCallback(
+    (id: string, isComplete: boolean) => {
+      const type = isComplete ? "UNCOMPLETE" : "COMPLETE";
+      dispatch({
+        type,
+        id,
+      });
+    },
+    [dispatch]
+  );
 
-  const handleRemove = useCallback((id: string) => {
-    dispatch({
-      type: "REMOVE",
-      id,
-    });
-  }, []);
+  const handleRemove = useCallback(
+    (id: string) => {
+      dispatch({
+        type: "REMOVE",
+        id,
+      });
+    },
+    [dispatch]
+  );
 
   return (
     <div className="container">
