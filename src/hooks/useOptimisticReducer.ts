@@ -51,8 +51,29 @@ export const appStateReducer = (state: AppState, action: Action) => {
     }
 
     case "REMOVE": {
-      const { [action.id]: _pluck, ...otherState } = state;
-      return otherState;
+      const newState = { ...state };
+
+      if (action.id in newState) {
+        newState[action.id] = {
+          ...newState[action.id],
+          isRemoved: true,
+        };
+      }
+
+      return newState;
+    }
+
+    case "UNREMOVE": {
+      const newState = { ...state };
+
+      if (action.id in newState) {
+        newState[action.id] = {
+          ...newState[action.id],
+          isRemoved: false,
+        };
+      }
+
+      return newState;
     }
 
     default: {
@@ -93,17 +114,34 @@ const mirrorInDb = (action: Action) => {
       break;
     }
 
+    case "UNREMOVE": {
+      invoke("unremove_todo", { id: action.id }).then(() => {
+        // nothing
+      });
+      break;
+    }
+
     default: {
       break;
     }
   }
 };
 
-const useDB = (originalDispatch: React.Dispatch<Action>) => {
+const raiseUndoEvent = (action: Action) => {
+  if (action.type !== "REMOVE" || typeof CustomEvent !== "function") {
+    return;
+  }
+
+  const undoEvent = new CustomEvent("TODO_REMOVED", { detail: action.id });
+  document.dispatchEvent(undoEvent);
+};
+
+const useIntercept = (originalDispatch: React.Dispatch<Action>) => {
   const dispatch: OptimisticDispatch<Action> = useCallback(
     (action: Action) => {
       originalDispatch(action);
       mirrorInDb(action);
+      raiseUndoEvent(action);
     },
     [originalDispatch]
   );
@@ -113,7 +151,7 @@ const useDB = (originalDispatch: React.Dispatch<Action>) => {
 
 export const useOptimisticReducer = (initialTodos = {}) => {
   const [state, reactDispatch] = useReducer(appStateReducer, initialTodos);
-  const dispatch = useDB(reactDispatch);
+  const dispatch = useIntercept(reactDispatch);
 
   const ret: [AppState, OptimisticDispatch<Action>] = useMemo(
     () => [state, dispatch],
