@@ -105,6 +105,14 @@ impl DB {
         .execute(&mut tx)
         .await?;
 
+        sqlx::query!(
+            "
+            DELETE FROM todos WHERE is_removed = 1
+            ",
+        )
+        .execute(&mut tx)
+        .await?;
+
         tx.commit().await?;
 
         Ok(())
@@ -114,14 +122,15 @@ impl DB {
         let iso = self.today_iso_date.to_string();
         sqlx::query!(
             "
-            INSERT INTO todos (todo_id, is_complete, content, modify_date, create_date)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO todos (todo_id, is_complete, content, modify_date, create_date, is_removed)
+            VALUES ($1, $2, $3, $4, $5, $6)
             ",
             id,
             0,
             content,
             iso,
-            iso
+            iso,
+            0
         )
         .execute(&self.connection_pool)
         .await?;
@@ -158,7 +167,20 @@ impl DB {
     pub async fn remove_todo(&self, id: &str) -> Result<(), DbError> {
         sqlx::query!(
             "
-            DELETE FROM todos WHERE todo_id = $1
+            UPDATE todos SET is_removed = 1 WHERE todo_id = $1
+            ",
+            id
+        )
+        .execute(&self.connection_pool)
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn unremove_todo(&self, id: &str) -> Result<(), DbError> {
+        sqlx::query!(
+            "
+            UPDATE todos SET is_removed = 0 WHERE todo_id = $1
             ",
             id
         )
@@ -195,7 +217,7 @@ impl DB {
     pub async fn get_todos(&self) -> Result<String, DbError> {
         let iso = self.today_iso_date.to_string();
         let todays_todos = sqlx::query!(
-            "SELECT todo_id,content,is_complete FROM todos WHERE modify_date = $1",
+            "SELECT todo_id,content,is_complete FROM todos WHERE modify_date = $1 AND is_removed = 0",
             iso
         )
         .fetch_all(&self.connection_pool)
