@@ -36,6 +36,11 @@ async fn remove_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, 
 }
 
 #[tauri::command]
+async fn unremove_todo(db: tauri::State<'_, sql::DB>, id: String) -> Result<bool, ()> {
+    Ok(db.unremove_todo(&id).await.is_ok())
+}
+
+#[tauri::command]
 async fn set_ordering(db: tauri::State<'_, sql::DB>, order: String) -> Result<bool, ()> {
     Ok(db.set_ordering(&order).await.is_ok())
 }
@@ -55,7 +60,8 @@ fn main() {
                 get_todos,
                 remove_todo,
                 set_ordering,
-                uncomplete_todo
+                uncomplete_todo,
+                unremove_todo,
             ])
             .run(tauri::generate_context!())
             .expect("error while running tauri application");

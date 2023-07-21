@@ -19,18 +19,24 @@ export type REMOVE = {
   type: "REMOVE";
 };
 
+export type UNREMOVE = {
+  id: string;
+  type: "UNREMOVE";
+};
+
 export type MOVE = {
   destinationIndex: number;
   id: string;
   type: "MOVE";
 };
 
-export type Action = ADD | COMPLETE | UNCOMPLETE | REMOVE | MOVE;
+export type Action = ADD | COMPLETE | UNCOMPLETE | REMOVE | UNREMOVE | MOVE;
 
 export type StateItem = {
   addedAt: number;
   content: string;
   isComplete: boolean;
+  isRemoved?: boolean;
 };
 
 export type AppState = {
