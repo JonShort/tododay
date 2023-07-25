@@ -1,0 +1,22 @@
+.undo-handler {
+  background: var(--background);
+  bottom: 0;
+  left: 0;
+  padding-left: 4vw;
+  position: fixed;
+  transition: transform 0.1s ease-in-out;
+  width: calc(100% - 4vw);
+}
+
+.undo-handler.shown {
+  transform: translateY(0px);
+}
+
+.undo-handler.hidden {
+  transform: translateY(20px);
+}
+
+.undo-message {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.8rem;
+}

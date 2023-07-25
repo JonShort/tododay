@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { OptimisticDispatch, UNREMOVE } from "../types";
+
+const TWO_SECONDS_IN_MS = 2000;
 
 const isValidCustomEvent = (ev: Event): ev is CustomEvent<string> => {
   return "detail" in ev && typeof ev.detail === "string";
@@ -8,6 +10,7 @@ const isValidCustomEvent = (ev: Event): ev is CustomEvent<string> => {
 
 export const useUndo = (dispatch: OptimisticDispatch<UNREMOVE>) => {
   const stack = useRef<string[]>([]);
+  const [showUndoUI, setShowUndoUI] = useState(false);
 
   useEffect(() => {
     const handleEvent = (ev: Event) => {
@@ -16,6 +19,7 @@ export const useUndo = (dispatch: OptimisticDispatch<UNREMOVE>) => {
       }
 
       stack.current.push(ev.detail);
+      setShowUndoUI(true);
     };
 
     document.addEventListener("TODO_REMOVED", handleEvent);
@@ -45,6 +49,7 @@ export const useUndo = (dispatch: OptimisticDispatch<UNREMOVE>) => {
         id: itemToUndo,
         type: "UNREMOVE",
       });
+      setShowUndoUI(false);
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -53,4 +58,20 @@ export const useUndo = (dispatch: OptimisticDispatch<UNREMOVE>) => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!showUndoUI) {
+      return;
+    }
+
+    const t = setTimeout(() => {
+      setShowUndoUI(false);
+    }, TWO_SECONDS_IN_MS);
+
+    return () => {
+      clearTimeout(t);
+    };
+  }, [showUndoUI]);
+
+  return useMemo(() => showUndoUI, [showUndoUI]);
 };
