@@ -1,10 +1,10 @@
 [package]
 name = "tododay"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+version = "1.0.0"
+description = "Desktop application designed to make daily todos simple "
+authors = ["JonShort"]
+license = "MIT"
+repository = "https://github.com/JonShort/tododay"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -21,13 +21,7 @@ chrono = { version = "0.4", default-features = false, features = ["clock"] }
 [dependencies.sqlx]
 version = "0.6"
 default-features = false
-features = [
-    "macros",
-    "migrate",
-    "offline",
-    "runtime-tokio-rustls",
-    "sqlite"
-]
+features = ["macros", "migrate", "offline", "runtime-tokio-rustls", "sqlite"]
 
 [features]
 # by default Tauri runs in production mode
@@ -38,4 +32,4 @@ default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
 
 [profile.release]
-strip = true  # Automatically strip symbols from the binary.
+strip = true # Automatically strip symbols from the binary.
