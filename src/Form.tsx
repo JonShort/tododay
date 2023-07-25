@@ -3,11 +3,12 @@ import { appWindow } from "@tauri-apps/api/window";
 import { nanoid } from "nanoid";
 
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
-import { useUndo } from "./hooks/useUndo";
 import { Syncer } from "./Syncer";
+import { UndoHandler } from "./UndoHandler";
 import { useOptimisticReducer } from "./hooks/useOptimisticReducer";
-import type { AppState } from "./types";
 import "./Form.css";
+
+import type { AppState } from "./types";
 
 type Props = {
   initialTodos: AppState;
@@ -19,7 +20,6 @@ export const Form = ({ initialTodos = {} }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useKeyboardNavigation(dispatch);
-  useUndo(dispatch);
 
   useEffect(() => {
     const unlisten = appWindow.onFocusChanged(({ payload: focused }) => {
@@ -139,6 +139,8 @@ export const Form = ({ initialTodos = {} }: Props) => {
       <div className="sync-container">
         <Syncer appState={state} />
       </div>
+
+      <UndoHandler dispatch={dispatch} />
     </div>
   );
 };
