@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            UPDATE ordering SET current = $1 WHERE order_id = 1\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "538761220d4999fdec0630ce60a4e25bd10cf0e406901c855c08009ee1506b66"
+}

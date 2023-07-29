@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT current FROM ordering WHERE order_id = $1 LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "name": "current",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "fc9afa49d31df32ff406388307c48acb97f72034b2dcad1e9d19cfd4f037b08b"
+}

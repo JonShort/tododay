@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            UPDATE todos SET modify_date = $1 WHERE is_complete = 0\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "d5056d65222bebed1d0a43f294e6f68572fa474b9a8e7c9e61c80f619b4431f6"
+}
