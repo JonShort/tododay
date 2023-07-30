@@ -9,6 +9,8 @@ import { useOptimisticReducer } from "./hooks/useOptimisticReducer";
 import "./Form.css";
 
 import type { AppState } from "./types";
+import TodoItem from "./components/TodoItem";
+import FormProvider from "./components/FormProvider";
 
 type Props = {
   initialTodos: AppState;
@@ -76,71 +78,36 @@ export const Form = ({ initialTodos = {} }: Props) => {
   );
 
   return (
-    <div className="container">
-      <div className="row">
-        <form onSubmit={handleSubmit} method="POST" ref={formRef}>
-          <input name="todo" placeholder="Enter your todo..." ref={inputRef} />
-          <button type="submit">Add</button>
-        </form>
+    <FormProvider
+      dispatch={dispatch}
+      handleCheck={handleCheck}
+      handleRemove={handleRemove}
+      state={state}
+    >
+      <div className="container">
+        <div className="row">
+          <form onSubmit={handleSubmit} method="POST" ref={formRef}>
+            <input
+              name="todo"
+              placeholder="Enter your todo..."
+              ref={inputRef}
+            />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+
+        <div className="todos-container">
+          {Object.keys(state).map((todoId, idx) => {
+            return <TodoItem key={todoId} todoId={todoId} idx={idx} />
+          })}
+        </div>
+
+        <div className="sync-container">
+          <Syncer appState={state} />
+        </div>
+
+        <UndoHandler dispatch={dispatch} />
       </div>
-
-      <div className="todos-container">
-        {Object.keys(state).map((todoId, idx) => {
-          const { content, isComplete, isRemoved = false } = state[todoId];
-
-          if (isRemoved) {
-            return null;
-          }
-
-          return (
-            <label
-              className="todo"
-              draggable
-              onDragOver={(ev) => ev.preventDefault()}
-              onDragStart={(ev) => {
-                ev.dataTransfer.setData("id", todoId);
-                ev.dataTransfer.effectAllowed = "move";
-              }}
-              onDrop={(ev) => {
-                ev.preventDefault();
-                const dropId = ev.dataTransfer.getData("id");
-
-                if (!dropId) {
-                  return;
-                }
-
-                dispatch({
-                  destinationIndex: idx,
-                  id: dropId,
-                  type: "MOVE",
-                });
-              }}
-              key={todoId}
-            >
-              <input
-                checked={isComplete}
-                id={todoId}
-                data-n={idx}
-                onChange={() => handleCheck(todoId, isComplete)}
-                type="checkbox"
-              />
-              <span className="todo__content">{content}</span>
-              <button
-                className="button__del"
-                onClick={() => handleRemove(todoId)}
-              >
-                x
-              </button>
-            </label>
-          );
-        })}
-      </div>
-
-      <div className="sync-container">
-        <Syncer appState={state} />
-      </div>
-
-      <UndoHandler dispatch={dispatch} />
-    </div>
+    </FormProvider>
   );
 };
