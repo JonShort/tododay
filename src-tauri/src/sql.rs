@@ -93,7 +93,7 @@ impl DB {
             month,
             year
         )
-        .execute(&mut tx)
+        .execute(&mut *tx)
         .await?;
 
         sqlx::query!(
@@ -102,7 +102,7 @@ impl DB {
             ",
             iso
         )
-        .execute(&mut tx)
+        .execute(&mut *tx)
         .await?;
 
         sqlx::query!(
@@ -110,7 +110,7 @@ impl DB {
             DELETE FROM todos WHERE is_removed = 1
             ",
         )
-        .execute(&mut tx)
+        .execute(&mut *tx)
         .await?;
 
         tx.commit().await?;

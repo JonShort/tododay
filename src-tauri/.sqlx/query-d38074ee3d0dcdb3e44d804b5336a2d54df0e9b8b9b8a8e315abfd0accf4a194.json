@@ -1,0 +1,32 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT todo_id,content,is_complete FROM todos WHERE modify_date = $1 AND is_removed = 0",
+  "describe": {
+    "columns": [
+      {
+        "name": "todo_id",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "content",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "is_complete",
+        "ordinal": 2,
+        "type_info": "Int64"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "d38074ee3d0dcdb3e44d804b5336a2d54df0e9b8b9b8a8e315abfd0accf4a194"
+}

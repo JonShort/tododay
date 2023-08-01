@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            UPDATE todos SET is_removed = 1 WHERE todo_id = $1\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "81afa54162a3d9ed4d18492d8ad994912abe54ba6796f5ff08840435d2f1a4e1"
+}
