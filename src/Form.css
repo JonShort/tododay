@@ -47,9 +47,13 @@
 }
 
 .todo .todo__content {
+  -webkit-hyphens: auto;
   cursor: pointer;
   flex-grow: 1;
+  hyphens: auto;
+  overflow-wrap: anywhere;
   padding: 0.7rem;
+  word-break: normal;
 }
 
 .button__del {
