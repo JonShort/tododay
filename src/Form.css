@@ -43,19 +43,29 @@
 
 .todo:hover,
 .todo:focus-within {
-  background: rgba(var(--color-rgb), 0.2);
+  background: rgba(var(--color-rgb), 0.08);
+}
+
+.todo:hover .button__del,
+.todo:focus-within .button__del {
+  opacity: 1;
 }
 
 .todo .todo__content {
+  -webkit-hyphens: auto;
   cursor: pointer;
   flex-grow: 1;
+  hyphens: auto;
+  overflow-wrap: anywhere;
   padding: 0.7rem;
+  word-break: normal;
 }
 
 .button__del {
-  padding: 0.5rem 1rem;
-  color: rgba(var(--color-rgb), 0.2);
-  background: rgba(var(--bkg-rgb), 0.3);
+  background: rgba(var(--bkg-rgb), 0.8);
+  color: rgba(var(--color-rgb), 0.5);
+  opacity: 0;
+  padding: 0.5rem 0.75rem;
 }
 
 .sync-container {
