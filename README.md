@@ -2,7 +2,7 @@
 
 <img src="assets/splash.webp" alt="tododay" />
 
-## What is tododay?
+## What is tododay? RUN CI
 
 tododay is designed with the following principles in mind:
 
