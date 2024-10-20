@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use tauri::Manager;
 mod sql;
 
 #[tauri::command]
@@ -47,25 +48,28 @@ async fn set_ordering(db: tauri::State<'_, sql::DB>, order: String) -> Result<bo
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::async_runtime::block_on(async {
-        let db = sql::DB::new().await.unwrap();
-        db.run_migrations().await.unwrap();
-        db.setup_todays_todos().await.unwrap();
+    tauri::Builder::default()
+        .setup(|app| {
+            tauri::async_runtime::block_on(async {
+                let db = sql::DB::new(app).await.unwrap();
+                db.run_migrations().await.unwrap();
+                db.setup_todays_todos().await.unwrap();
 
-        tauri::Builder::default()
-            .plugin(tauri_plugin_shell::init())
-            .manage(db)
-            .invoke_handler(tauri::generate_handler![
-                add_todo,
-                complete_todo,
-                get_ordering,
-                get_todos,
-                remove_todo,
-                set_ordering,
-                uncomplete_todo,
-                unremove_todo,
-            ])
-            .run(tauri::generate_context!())
-            .expect("error while running tauri application");
-    });
+                app.manage(db);
+            });
+            Ok(())
+        })
+        .plugin(tauri_plugin_shell::init())
+        .invoke_handler(tauri::generate_handler![
+            add_todo,
+            complete_todo,
+            get_ordering,
+            get_todos,
+            remove_todo,
+            set_ordering,
+            uncomplete_todo,
+            unremove_todo,
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }

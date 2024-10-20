@@ -3,7 +3,7 @@ use sqlx::{Pool, Sqlite};
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::{error, fmt, fs};
-use tauri::api;
+use tauri::{App, Manager};
 
 use chrono::Datelike;
 
@@ -14,15 +14,11 @@ pub struct DB {
 }
 
 impl DB {
-    pub async fn new() -> Result<Self, DbError> {
-        let app_data_dir = match api::path::app_data_dir(&Default::default()) {
-            Some(d) => d,
-            None => return Err(DbError),
+    pub async fn new(app: &App) -> Result<Self, DbError> {
+        let app_data_dir = match app.path().app_data_dir() {
+            Ok(d) => d,
+            _ => return Err(DbError),
         };
-
-        // It would be best to pull the application name from the tauri config, but it's weirdly difficult
-        // pre-setup - for now this is hardcoded
-        let app_data_dir = app_data_dir.join("com.tododay.dev");
 
         // Tauri doesn't create the $APPDATA directory automatically,
         // so here we create it if it doesn't already exist
