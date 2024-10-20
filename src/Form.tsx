@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { appWindow } from "@tauri-apps/api/window";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { nanoid } from "nanoid";
 
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
@@ -9,6 +9,7 @@ import { useOptimisticReducer } from "./hooks/useOptimisticReducer";
 import "./Form.css";
 
 import type { AppState } from "./types";
+const appWindow = getCurrentWebviewWindow()
 
 type Props = {
   initialTodos: AppState;

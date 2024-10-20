@@ -7,16 +7,21 @@ license = "MIT"
 repository = "https://github.com/JonShort/tododay"
 edition = "2021"
 
+[lib]
+name = "tododay_lib"
+crate-type = ["staticlib", "cdylib", "rlib", "lib"]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
 serde_json = { version = "1.0", features = ["preserve_order"] }
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.7", features = ["shell-open"] }
+tauri = { version = "2", features = [] }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
+tauri-plugin-shell = "2"
 
 [dependencies.sqlx]
 version = "0.7"
