@@ -38,9 +38,6 @@ impl DB {
             .acquire_timeout(std::time::Duration::from_secs(2))
             .connect_lazy_with(connect_options);
 
-        let mut save_file = app_data_dir;
-        save_file.push(format!("{}.json", Local::now().date_naive()));
-
         Ok(Self {
             connection_pool,
             today_iso_date: Local::now().date_naive(),
