@@ -15,13 +15,16 @@ pub struct DB {
 
 impl DB {
     pub async fn new(app: &App) -> Result<Self, DbError> {
-        let app_data_dir = match app.path().app_data_dir() {
-            Ok(d) => d,
-            _ => return Err(DbError),
-        };
+        let data_dir = app.path().data_dir()?;
+        let app_data_dir = app.path().app_data_dir()?;
 
-        // Tauri doesn't create the $APPDATA directory automatically,
-        // so here we create it if it doesn't already exist
+        // In some cases (e.g. iOS) the $APPDATA directory doesn't exist
+        if !data_dir.exists() && fs::create_dir(&data_dir).is_err() {
+            return Err(DbError);
+        }
+
+        // Tauri doesn't create the $APPDATA/[app] directory for applications
+        // automatically, so here we create it if it doesn't already exist
         if !app_data_dir.exists() && fs::create_dir(&app_data_dir).is_err() {
             return Err(DbError);
         }
@@ -252,6 +255,12 @@ impl fmt::Display for DbError {
 }
 
 impl error::Error for DbError {}
+
+impl From<tauri::Error> for DbError {
+    fn from(_: tauri::Error) -> Self {
+        DbError
+    }
+}
 
 impl From<sqlx::Error> for DbError {
     fn from(_: sqlx::Error) -> Self {
