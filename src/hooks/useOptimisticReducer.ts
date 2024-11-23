@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useReducer } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/core";
 
 import type { Action, AppState, OptimisticDispatch } from "../types";
 

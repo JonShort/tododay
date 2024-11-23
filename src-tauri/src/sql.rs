@@ -3,7 +3,7 @@ use sqlx::{Pool, Sqlite};
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::{error, fmt, fs};
-use tauri::api;
+use tauri::{App, Manager};
 
 use chrono::Datelike;
 
@@ -14,18 +14,17 @@ pub struct DB {
 }
 
 impl DB {
-    pub async fn new() -> Result<Self, DbError> {
-        let app_data_dir = match api::path::app_data_dir(&Default::default()) {
-            Some(d) => d,
-            None => return Err(DbError),
-        };
+    pub async fn new(app: &App) -> Result<Self, DbError> {
+        let data_dir = app.path().data_dir()?;
+        let app_data_dir = app.path().app_data_dir()?;
 
-        // It would be best to pull the application name from the tauri config, but it's weirdly difficult
-        // pre-setup - for now this is hardcoded
-        let app_data_dir = app_data_dir.join("com.tododay.dev");
+        // In some cases (e.g. iOS) the $APPDATA directory doesn't exist
+        if !data_dir.exists() && fs::create_dir(&data_dir).is_err() {
+            return Err(DbError);
+        }
 
-        // Tauri doesn't create the $APPDATA directory automatically,
-        // so here we create it if it doesn't already exist
+        // Tauri doesn't create the $APPDATA/[app] directory for applications
+        // automatically, so here we create it if it doesn't already exist
         if !app_data_dir.exists() && fs::create_dir(&app_data_dir).is_err() {
             return Err(DbError);
         }
@@ -41,9 +40,6 @@ impl DB {
         let connection_pool = sqlx::sqlite::SqlitePoolOptions::new()
             .acquire_timeout(std::time::Duration::from_secs(2))
             .connect_lazy_with(connect_options);
-
-        let mut save_file = app_data_dir;
-        save_file.push(format!("{}.json", Local::now().date_naive()));
 
         Ok(Self {
             connection_pool,
@@ -259,6 +255,12 @@ impl fmt::Display for DbError {
 }
 
 impl error::Error for DbError {}
+
+impl From<tauri::Error> for DbError {
+    fn from(_: tauri::Error) -> Self {
+        DbError
+    }
+}
 
 impl From<sqlx::Error> for DbError {
     fn from(_: sqlx::Error) -> Self {
