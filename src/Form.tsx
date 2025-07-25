@@ -9,7 +9,7 @@ import { useOptimisticReducer } from "./hooks/useOptimisticReducer";
 import "./Form.css";
 
 import type { AppState } from "./types";
-const appWindow = getCurrentWebviewWindow()
+const appWindow = getCurrentWebviewWindow();
 
 type Props = {
   initialTodos: AppState;
