@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
 import { Form } from "./Form";
 import { AppState } from "./types";
 
+type LoadState =
+  | { status: "FETCHING" }
+  | { status: "DONE"; data: AppState }
+  | { status: "ERROR"; error: Error };
+
 function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const formStateRef = useRef<AppState>({});
+  const [loadState, setLoadState] = useState<LoadState>({ status: "FETCHING" });
 
   useEffect(() => {
     Promise.all([invoke<string>("get_todos"), invoke<string>("get_ordering")])
@@ -43,18 +47,26 @@ function App() {
           return acc;
         }, {});
 
-        formStateRef.current = newStateObj;
+        setLoadState({ status: "DONE", data: newStateObj });
       })
-      .finally(() => {
-        setIsLoaded(true);
+      .catch((err: unknown) => {
+        const error = err instanceof Error ? err : new Error(String(err));
+        setLoadState({ status: "ERROR", error });
       });
   }, []);
 
-  if (!isLoaded) {
-    return <div className="container">...Setting up tododay</div>;
+  switch (loadState.status) {
+    case "FETCHING":
+      return <div className="container">...Setting up tododay</div>;
+    case "ERROR":
+      return (
+        <div className="container">
+          Error loading tododay: {loadState.error.message}
+        </div>
+      );
+    case "DONE":
+      return <Form initialTodos={loadState.data} />;
   }
-
-  return <Form initialTodos={formStateRef.current} />;
 }
 
 export default App;

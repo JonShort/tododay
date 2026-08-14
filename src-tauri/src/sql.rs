@@ -249,8 +249,9 @@ pub struct GetTodo {
 pub struct DbError;
 
 impl fmt::Display for DbError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "error communicating with the SQL database")
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "error communicating with the SQL database")?;
+        Ok(())
     }
 }
 
